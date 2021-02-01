@@ -1,26 +1,24 @@
 import React from 'react'
 import { StyleSheet, Text, View, ViewProps } from 'react-native'
+import PaySubscribe from '../screens/payment/subscribe/PaySubscribe'
 import SelectButton from './SelectButton'
 import SelectPoints from './SelectPoints'
 import SubscribePlan from './SubscribePlan'
-import { CardType } from './types'
+import { CardType, PaymentCardProps } from './types'
 
-interface PaymentCardProps{
-    type:CardType
-}
 
-const Card = (props: PaymentCardProps) => {
-    const {type} = props
+const Card: React.FC<PaymentCardProps> = (props) => {
+    const {type, data} = props
      const renderButton = () => {
         switch (type) {
             case CardType.TYPE:
-                return SelectButton()
+                return SelectButton(props)
             case CardType.AMOUNT:
-                return SelectPoints()
+                return SelectPoints(props)
             case CardType.PLAN:
-                return SubscribePlan()
-                break;
+                return SubscribePlan(props)
             case CardType.CHARGE:
+                return PaySubscribe(props)
                 break
             default:
                 break;

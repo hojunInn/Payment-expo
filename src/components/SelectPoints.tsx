@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import { StyleSheet, Text, View, FlatList, TextInput } from 'react-native'
 import {Button, Icon, Input} from 'react-native-elements'
 
-const SelectPoints = () => {
+const SelectPoints = (props: PaymentCardProps) => {
     const [price, setPrice] = useState(0)
     const [showOtherPrice, setShowOtherPrice] = useState(false)
     

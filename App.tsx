@@ -4,7 +4,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import apolloClient from './client'
 import SubscribePlanHome from './src/screens/payment/subscribe';
-import PayPointHomScreen from './src/screens/payment/point';
+import PayPointHomeScreen from './src/screens/payment/point';
  
  
 export default function App() {
@@ -12,8 +12,8 @@ export default function App() {
     <ApolloProvider client={apolloClient}>
       <View style={styles.container}>        
         <StatusBar style="auto" />
-        {/* <PayPointHomeScreen/> */}
-        <SubscribePlanHome/>
+        <PayPointHomeScreen/>
+        {/* <SubscribePlanHome/> */}
       </View>
     </ApolloProvider>
   );

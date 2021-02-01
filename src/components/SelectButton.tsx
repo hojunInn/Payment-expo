@@ -1,8 +1,9 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
+import { PaymentCardProps } from './types'
 
-const SelectButton = () => {
+const SelectButton = (props: PaymentCardProps) => {
     return (
         <View style={styles.container}>
             <Button 

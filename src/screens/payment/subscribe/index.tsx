@@ -36,6 +36,9 @@ const SubscribePlanHome = () => {
     return (
         <>
           <Card type={CardType.PLAN}/>
+          <View>
+
+          </View>
           <FlatList
             data={dummy}
             renderItem={renderLog}
@@ -121,7 +124,9 @@ const styles = StyleSheet.create({
         marginHorizontal:5,
         borderRadius: 20,
         borderColor:"white",
-        borderWidth:0.1
+        borderWidth:0.1,
+        height:25,
+        justifyContent: 'center',
     },
     TagFont:{
         fontWeight:'700',
