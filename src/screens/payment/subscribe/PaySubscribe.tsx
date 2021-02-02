@@ -75,7 +75,7 @@ const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) 
                                 value={numberWithCommas(numOfMember)}
                                 maxLength={10}
                                 onChangeText={(text) => {
-                                    setNumOfMember(Number(text));
+                                    setNumOfMember(Number(text.replaceAll(/,/gi, '')));
                                 }}
                             />
                             <Divider style={{ height: 1, width: 189, marginTop: 20, alignSelf: 'center' }} />

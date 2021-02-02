@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, FlatList, TextInput } from 'react-native';
 import { Button, Divider, Icon } from 'react-native-elements';
 import { Surface } from 'react-native-paper';
-import Card from '../../../components/Card';
-import { CardType, PointData } from '../../../components/types';
 import { numberWithCommas } from '../../../utils/money';
 
 const PayPointHomeScreen = () => {
     const [price, setPrice] = useState(0);
-    console.log('🚀 Output --->>> price', price);
     const [showOtherPrice, setShowOtherPrice] = useState(false);
     const renderTags = ({ item, index }: { item: number; index: number }) => {
         return (
@@ -44,7 +41,8 @@ const PayPointHomeScreen = () => {
                     <FlatList
                         data={[10, 20, 30, 50, 100, 300]}
                         renderItem={renderTags}
-                        contentContainerStyle={styles.rowContainer}
+                        horizontal={true}
+                        style={{ marginVertical: 15, alignSelf: 'center' }}
                     />
                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                         <Button
@@ -68,15 +66,14 @@ const PayPointHomeScreen = () => {
                                 selectionColor="#000000"
                                 placeholder="0"
                                 placeholderTextColor="#5B667625"
-                                style={[styles.inputFont]}
-                                // keyboardType="number-pad"
+                                style={[styles.inputFont, { color: price === 0 ? '#00000030' : '#FB8C00' }]}
                                 textAlign="center"
                                 onFocus={() => setPrice(0)}
                                 clearTextOnFocus={true}
                                 value={numberWithCommas(price)}
                                 maxLength={10}
                                 onChangeText={(text) => {
-                                    setPrice(Number(text));
+                                    setPrice(Number(text.replaceAll(/,/gi, '')));
                                 }}
                             />
                             <Divider style={{ height: 1 }} />
@@ -108,10 +105,9 @@ const styles = StyleSheet.create({
     },
     priceTag: {
         flexDirection: 'row',
-        padding: 5,
         marginHorizontal: 5,
         borderRadius: 20,
-        borderColor: '#00000030',
+        borderColor: '#00000010',
         borderWidth: 0.5,
     },
     otherPriceContainer: {
@@ -127,7 +123,6 @@ const styles = StyleSheet.create({
         lineHeight: 36,
         letterSpacing: -0.3,
         fontSize: 34,
-        color: '#FB8C00',
         textAlign: 'center',
         marginBottom: 10,
     },

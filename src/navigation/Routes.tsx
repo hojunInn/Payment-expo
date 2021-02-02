@@ -4,10 +4,11 @@ import { PaymentStackScreens } from './PaymentStack';
 import { SubscribeStackScreens } from './SubscribeStack';
 
 const Routes: React.FC = () => {
+    const query = window.location.search.split('=')[1];
+
     return (
         <NavigationContainer>
-            {/* <PaymentStackScreens /> */}
-            <SubscribeStackScreens />
+            {query === 'TestString' ? <PaymentStackScreens /> : <SubscribeStackScreens />}
         </NavigationContainer>
     );
 };
