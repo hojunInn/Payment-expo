@@ -11,9 +11,7 @@ interface ContainerInputs{
     buttonPressed?: () => void
 }
 
-const SubscribePlan = (props:PaymentCardProps) => {
-
-
+const SubscribePlanMain = (props:PaymentCardProps) => {
 
     const container = (input: ContainerInputs) => {
       return(
@@ -31,7 +29,7 @@ const SubscribePlan = (props:PaymentCardProps) => {
     return (
         <View style={styles.container}>
             {container({title:"사용중인 요금제", description:"프리미엄 요금제", buttonTitle:"구독취소", buttonPressed:()=>{}})}
-            <View style={{flexDirection:'row'}}>
+            <View style={{flexDirection:'row', justifyContent: 'space-between',}}>
                 {container({title:"상태", description:"활성"})}
                 {container({title:"라이선스", description:"17개", buttonTitle:"변경", buttonPressed: () => {}})}
                 {container({title:"결제방법", description:"자동결제"})}
@@ -42,7 +40,7 @@ const SubscribePlan = (props:PaymentCardProps) => {
     )
 }
 
-export default SubscribePlan
+export default SubscribePlanMain
 
 const styles = StyleSheet.create({
     container:{

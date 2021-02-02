@@ -1,6 +1,8 @@
 
 
 export interface PaymentCardProps{
+    title?:string
+    subtitle?: string
     type:CardType
     data:PointData | SubscriptionData
 }
@@ -10,6 +12,7 @@ export enum CardType{
     AMOUNT = "SelectAmount",
     PLAN = "PlanInfo",
     CHARGE = "ChargeInfo",
+    CHARGERENDER = "ChargeRendering"
 }
 
 export enum SubscribeType{
@@ -33,5 +36,5 @@ export interface SubscriptionData{
 }
 export interface PointData{
     point: number
-    type: string
+    type?: string
 }

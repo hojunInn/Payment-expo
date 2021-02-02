@@ -1,9 +1,10 @@
 import React from 'react'
 import { StyleSheet, Text, View, ViewProps } from 'react-native'
-import PaySubscribe from '../screens/payment/subscribe/PaySubscribe'
 import SelectButton from './SelectButton'
 import SelectPoints from './SelectPoints'
-import SubscribePlan from './SubscribePlan'
+import SubscribePlan from './SubscribePlanMain'
+import SubscriptionChargeRender from './SubscribtionChargeRender'
+import SubscriptionCharge from './SubscriptionCharge'
 import { CardType, PaymentCardProps } from './types'
 
 
@@ -18,8 +19,9 @@ const Card: React.FC<PaymentCardProps> = (props) => {
             case CardType.PLAN:
                 return SubscribePlan(props)
             case CardType.CHARGE:
-                return PaySubscribe(props)
-                break
+                return SubscriptionCharge(props)
+            case CardType.CHARGERENDER:
+                return SubscriptionChargeRender(props)
             default:
                 break;
         }
