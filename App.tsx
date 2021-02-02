@@ -3,27 +3,18 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import apolloClient from './client';
-import SubscribePlanMain from './src/screens/payment/subscribe/index';
-import PaySubscribe from './src/screens/payment/subscribe/PaySubscribe';
+import Routes from './src/navigation/Routes';
+import { NavigationContainer } from '@react-navigation/native';
+import PayPointHomeScreen from './src/screens/payment/point';
+import { Button, Header, Icon } from 'react-native-elements';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {
     return (
         <ApolloProvider client={apolloClient}>
-            <View style={styles.container}>
-                <StatusBar style="auto" />
-                {/* <PayPointHomeScreen/> */}
-                <SubscribePlanMain />
-                {/* <PaySubscribe/> */}
-            </View>
+            <SafeAreaProvider>
+                <Routes />
+            </SafeAreaProvider>
         </ApolloProvider>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});

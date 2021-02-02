@@ -1,97 +1,147 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SubscriptionData } from '../../../components/types';
 import { Surface, Switch } from 'react-native-paper';
-import { Button, Divider } from 'react-native-elements';
+import { Button, Divider, Header, Icon } from 'react-native-elements';
 import { SubscribeNavProps } from '../../../navigation/types/SubscribeStackParams';
+import { returnDate } from '../../../utils/datetime';
+import { numberWithCommas } from '../../../utils/money';
 
 const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) => {
     const [subscribeData, setSubscribeData] = useState<SubscriptionData>();
-    const [numOfMember, setNumOfMember] = useState(5);
-    const [paymentType, setPaymentType] = useState('manual');
+    const [numOfMember, setNumOfMember] = useState(0);
     const [toggle, setToggle] = useState(false);
     const [pricePerMember, setPricePerMember] = useState(0);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [startDate, setStartDate] = useState(new Date());
+    const [dueDate, setDueDate] = useState(new Date());
 
     useEffect(() => {
-        toggle ? setPricePerMember(6000 * 0.9) : setPricePerMember(6000);
+        setStartDate(new Date());
+        let newDueDate = startDate;
+
+        if (toggle) {
+            setPricePerMember(6000 * 0.9);
+            newDueDate.setFullYear(startDate.getFullYear() + 1);
+            setDueDate(newDueDate);
+        } else {
+            setPricePerMember(6000);
+            newDueDate.setMonth(startDate.getMonth() + 1);
+            setDueDate(newDueDate);
+        }
     }, [toggle]);
 
+    const calcTotalPrice = () => {
+        let price = numOfMember * pricePerMember;
+        //Yearly Plan
+        if (toggle) {
+            return price * 12;
+            //Monthly Plan
+        } else {
+            return price;
+        }
+    };
+    useEffect(() => {
+        setTotalPrice(calcTotalPrice());
+    }, [numOfMember, pricePerMember]);
+
     return (
-        <View style={{ marginBottom: 20 }}>
-            <Surface style={styles.bigSurface}>
-                <View style={styles.otherPriceContainer}>
-                    <Text style={{ alignSelf: 'center', marginBottom: 30 }}>몇명의 인원이 사용하나요?</Text>
-                    <TextInput
-                        selectionColor="#000000"
-                        placeholder="10"
-                        placeholderTextColor="#5B667625"
-                        style={[styles.inputFont]}
-                        keyboardType="number-pad"
-                        textAlign="center"
-                        clearTextOnFocus={true}
-                        maxLength={5}
-                        onChangeText={(text) => setNumOfMember(Number(text))}
-                    />
-                    <Divider style={{ height: 1, width: 189, marginTop: 20, alignSelf: 'center' }} />
-                </View>
-            </Surface>
-            <Surface style={styles.bigSurface}>
-                <View style={styles.otherPriceContainer}>
-                    <Text style={{ marginBottom: 30, textAlign: 'center' }}>결제주기를 선택해주세요</Text>
-                    <Text style={styles.inputFont}>{pricePerMember}원</Text>
-                    <Text style={styles.subtitle}>멤버당 한달요금</Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ color: toggle ? '#ADB2BA' : 'black' }}>매달</Text>
-                    <Switch
-                        value={toggle}
-                        onValueChange={setToggle}
-                        color="#FB8C00"
-                        trackColor="#FB8C0080"
-                        thumbColor="#FB8C00"
-                        style={{ marginHorizontal: 10 }}
-                    />
-                    <Text style={{ color: toggle ? 'black' : '#ADB2BA' }}>매년</Text>
-                </View>
-            </Surface>
-
-            <Surface style={styles.bigSurface}>
-                <View style={styles.otherPriceContainer}>
-                    <Text style={{ marginBottom: 30, textAlign: 'center' }}>총 결제하실 금액(부가세 포함)</Text>
-                    <Text style={styles.inputFont}>{numOfMember * pricePerMember}원</Text>
-                    <Text style={styles.subtitle}>2021년 1월 1일 ~ 2022년 12월 31일</Text>
-                </View>
-            </Surface>
-
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Surface style={styles.surface}>
+        <>
+            <Header
+                containerStyle={{ backgroundColor: '#FB8C00', borderBottomWidth: 1 }}
+                leftComponent={
                     <Button
-                        title="수동결제"
+                        onPress={() => navigation.goBack()}
+                        icon={<Icon type="font-awesome" size={30} name="angle-left" color="white" />}
                         type="clear"
-                        titleStyle={styles.buttonTitleFont}
-                        buttonStyle={{ backgroundColor: paymentType === 'manual' ? '#FB8C00' : '#ADB2BA', width: 130 }}
-                        onPress={() => {
-                            setPaymentType('manual');
-                        }}
-                        containerStyle={{ marginBottom: 20 }}
                     />
-                    <Text>매월 청구된 금액을 수동으로 직접 결제</Text>
-                </Surface>
-                <Surface style={styles.surface}>
-                    <Button
-                        title="자동결제"
-                        type="clear"
-                        titleStyle={styles.buttonTitleFont}
-                        buttonStyle={{ backgroundColor: paymentType === 'auto' ? '#FB8C00' : '#ADB2BA', width: 130 }}
-                        onPress={() => {
-                            setPaymentType('auto');
-                        }}
-                        containerStyle={{ marginBottom: 20 }}
-                    />
-                    <Text style={{ textAlign: 'center' }}>매월 청구된 금액을 지정된 결제방식으로 자동결제</Text>
-                </Surface>
+                }
+                centerComponent={<Text style={{ fontSize: 20, fontWeight: '700', color: 'white' }}>결제 페이지</Text>}
+            />
+            <View style={{ marginBottom: 20, justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <Surface style={styles.bigSurface}>
+                        <View style={styles.otherPriceContainer}>
+                            <Text style={{ alignSelf: 'center', marginBottom: 30 }}>몇명의 인원이 사용하나요?</Text>
+                            <TextInput
+                                selectionColor="#000000"
+                                placeholder="0"
+                                placeholderTextColor="#5B667625"
+                                style={[styles.inputFont]}
+                                keyboardType="number-pad"
+                                textAlign="center"
+                                clearTextOnFocus={true}
+                                onFocus={() => setNumOfMember(0)}
+                                value={numberWithCommas(numOfMember)}
+                                maxLength={10}
+                                onChangeText={(text) => {
+                                    setNumOfMember(Number(text));
+                                }}
+                            />
+                            <Divider style={{ height: 1, width: 189, marginTop: 20, alignSelf: 'center' }} />
+                        </View>
+                    </Surface>
+                    <Surface style={styles.bigSurface}>
+                        <View style={styles.otherPriceContainer}>
+                            <Text style={{ marginBottom: 30, textAlign: 'center' }}>결제주기를 선택해주세요</Text>
+                            <Text style={styles.inputFont}>{numberWithCommas(pricePerMember)}원</Text>
+                            <Text style={styles.subtitle}>멤버당 한달요금</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ color: toggle ? '#ADB2BA' : 'black' }}>매달</Text>
+                            <Switch
+                                value={toggle}
+                                onValueChange={setToggle}
+                                color="#FB8C00"
+                                trackColor="#FB8C0080"
+                                thumbColor="#FB8C00"
+                                style={{ marginHorizontal: 10 }}
+                            />
+                            <Text style={{ color: toggle ? 'black' : '#ADB2BA' }}>매년</Text>
+                        </View>
+                    </Surface>
+
+                    <Surface style={styles.bigSurface}>
+                        <View style={styles.otherPriceContainer}>
+                            <Text style={{ marginBottom: 30, textAlign: 'center' }}>총 결제하실 금액(부가세 포함)</Text>
+                            <Text style={styles.inputFont}>{numberWithCommas(totalPrice)}원</Text>
+                            <Text style={styles.subtitle}>{`${returnDate(startDate)} ~ ${returnDate(dueDate)}`}</Text>
+                        </View>
+                    </Surface>
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Surface style={styles.surface}>
+                            <Button
+                                title="수동결제"
+                                type="clear"
+                                titleStyle={styles.buttonTitleFont}
+                                buttonStyle={{
+                                    backgroundColor: '#ADB2BA',
+                                    width: 130,
+                                }}
+                                onPress={() => {}}
+                                containerStyle={{ marginBottom: 20 }}
+                            />
+                            <Text>매월 청구된 금액을 수동으로 직접 결제</Text>
+                        </Surface>
+                        <Surface style={styles.surface}>
+                            <Button
+                                title="자동결제"
+                                type="clear"
+                                titleStyle={styles.buttonTitleFont}
+                                buttonStyle={{
+                                    backgroundColor: '#FB8C00',
+                                    width: 130,
+                                }}
+                                onPress={() => {}}
+                                containerStyle={{ marginBottom: 20 }}
+                            />
+                            <Text style={{ textAlign: 'center' }}>매월 청구된 금액을 지정된 결제방식으로 자동결제</Text>
+                        </Surface>
+                    </View>
+                </ScrollView>
             </View>
-        </View>
+        </>
     );
 };
 
@@ -145,5 +195,9 @@ const styles = StyleSheet.create({
         lineHeight: 16,
         letterSpacing: 0.5,
         color: 'white',
+    },
+    buttonFont: {
+        fontSize: 12,
+        color: 'black',
     },
 });
