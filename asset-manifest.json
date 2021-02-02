@@ -1,0 +1,38 @@
+{
+  "files": {
+    "app.js": "/Payment-expo/static/js/app.5c185903.chunk.js",
+    "app.js.map": "/Payment-expo/static/js/app.5c185903.chunk.js.map",
+    "runtime~app.js": "/Payment-expo/static/js/runtime~app.080b1abb.js",
+    "runtime~app.js.map": "/Payment-expo/static/js/runtime~app.080b1abb.js.map",
+    "static/js/2.91cd64db.chunk.js": "/Payment-expo/static/js/2.91cd64db.chunk.js",
+    "static/js/2.91cd64db.chunk.js.map": "/Payment-expo/static/js/2.91cd64db.chunk.js.map",
+    "fonts/AntDesign.ttf": "/Payment-expo/./fonts/AntDesign.ttf",
+    "fonts/Entypo.ttf": "/Payment-expo/./fonts/Entypo.ttf",
+    "fonts/Feather.ttf": "/Payment-expo/./fonts/Feather.ttf",
+    "fonts/FontAwesome.ttf": "/Payment-expo/./fonts/FontAwesome.ttf",
+    "fonts/FontAwesome5_Brands.ttf": "/Payment-expo/./fonts/FontAwesome5_Brands.ttf",
+    "fonts/FontAwesome5_Solid.ttf": "/Payment-expo/./fonts/FontAwesome5_Solid.ttf",
+    "fonts/Fontisto.ttf": "/Payment-expo/./fonts/Fontisto.ttf",
+    "fonts/Foundation.ttf": "/Payment-expo/./fonts/Foundation.ttf",
+    "fonts/Ionicons.ttf": "/Payment-expo/./fonts/Ionicons.ttf",
+    "fonts/MaterialCommunityIcons.ttf": "/Payment-expo/./fonts/MaterialCommunityIcons.ttf",
+    "fonts/MaterialIcons.ttf": "/Payment-expo/./fonts/MaterialIcons.ttf",
+    "fonts/SimpleLineIcons.ttf": "/Payment-expo/./fonts/SimpleLineIcons.ttf",
+    "favicon-16.png": "/Payment-expo/favicon-16.png",
+    "favicon-32.png": "/Payment-expo/favicon-32.png",
+    "favicon.ico": "/Payment-expo/favicon.ico",
+    "index.html": "/Payment-expo/index.html",
+    "manifest.json": "/Payment-expo/manifest.json",
+    "serve.json": "/Payment-expo/serve.json",
+    "static/js/2.91cd64db.chunk.js.LICENSE.txt": "/Payment-expo/static/js/2.91cd64db.chunk.js.LICENSE.txt",
+    "static/media/bell.png": "/Payment-expo/static/media/bell.cf04af27.png",
+    "static/media/heart.png": "/Payment-expo/static/media/heart.23b5c2c0.png",
+    "static/media/rocket.png": "/Payment-expo/static/media/rocket.d2f3bf41.png",
+    "static/media/star.png": "/Payment-expo/static/media/star.69c71386.png"
+  },
+  "entrypoints": [
+    "static/js/runtime~app.080b1abb.js",
+    "static/js/2.91cd64db.chunk.js",
+    "static/js/app.5c185903.chunk.js"
+  ]
+}
