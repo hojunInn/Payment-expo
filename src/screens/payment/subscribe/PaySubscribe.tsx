@@ -7,6 +7,14 @@ import { SubscribeNavProps } from '../../../navigation/types/SubscribeStackParam
 import { returnDate } from '../../../utils/datetime';
 import { numberWithCommas } from '../../../utils/money';
 
+import jQuery from 'jquery';
+import { useCheckValidationMutation, useRoutinePaymentMutation } from '../../../graphql/generated';
+import { returnMerchantUid } from '../point/functions';
+window.$ = window.jQuery = jQuery;
+
+var IMP = window.IMP;
+IMP.init('imp10942072');
+
 const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) => {
     const [subscribeData, setSubscribeData] = useState<SubscriptionData>();
     const [numOfMember, setNumOfMember] = useState(0);
@@ -15,6 +23,43 @@ const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) 
     const [totalPrice, setTotalPrice] = useState(0);
     const [startDate, setStartDate] = useState(new Date());
     const [dueDate, setDueDate] = useState(new Date());
+
+    const [routinePay] = useRoutinePaymentMutation();
+    const [checkValidation] = useCheckValidationMutation();
+
+    const paymentInput = {
+        pg: 'html5_inicis',
+        pay_method: 'card',
+        merchant_uid: 'hj' + `${new Date()}`, // 상품 고유번호 - userId+timestamp
+        name: 'yearly', //상품 이름
+        amount: String(totalPrice),
+        buyer_email: 'TestEmail@gmail.com',
+        buyer_name: 'hj',
+        buyer_tel: '010-4242-4242',
+        buyer_addr: '서울특별시 강남구 샘성동',
+    };
+
+    const validationCheck = (imp_uid: string, merchant_uid: string) => {
+        checkValidation({
+            variables: {
+                input: {
+                    imp_uid: imp_uid,
+                    merchant_uid: merchant_uid,
+                },
+            },
+        }).then((result) => console.log(result));
+    };
+    const callPaymentModule = (type: 'monthly' | 'yearly') => {
+        if (type === 'monthly') {
+            //Buyer의 UserName을 넣는다.
+            (paymentInput.customer_uid = 'hj'), (paymentInput.name = type);
+        }
+        IMP.request_pay(paymentInput, function (rsp) {
+            console.log(rsp);
+
+            validationCheck(rsp.imp_uid, rsp.merchant_uid);
+        });
+    };
 
     useEffect(() => {
         setStartDate(new Date());
@@ -119,7 +164,9 @@ const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) 
                                     backgroundColor: '#ADB2BA',
                                     width: 130,
                                 }}
-                                onPress={() => {}}
+                                onPress={() => {
+                                    callPaymentModule('yearly');
+                                }}
                                 containerStyle={{ marginBottom: 20 }}
                             />
                             <Text>매월 청구된 금액을 수동으로 직접 결제</Text>
@@ -133,7 +180,9 @@ const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) 
                                     backgroundColor: '#FB8C00',
                                     width: 130,
                                 }}
-                                onPress={() => {}}
+                                onPress={() => {
+                                    callPaymentModule('monthly');
+                                }}
                                 containerStyle={{ marginBottom: 20 }}
                             />
                             <Text style={{ textAlign: 'center' }}>매월 청구된 금액을 지정된 결제방식으로 자동결제</Text>

@@ -6,32 +6,48 @@ import { useCheckValidationMutation } from '../../../graphql/generated';
 import { PaymentPostInput } from '../../../types';
 import { numberWithCommas } from '../../../utils/money';
 import { returnMerchantUid } from './functions';
+import jQuery from 'jquery';
+window.$ = window.jQuery = jQuery;
+
+var IMP = window.IMP;
+IMP.init('imp10942072');
 
 const PayPointHomeScreen = () => {
     const [price, setPrice] = useState(0);
     const [showOtherPrice, setShowOtherPrice] = useState(false);
     const [checkValidation] = useCheckValidationMutation();
 
-    const paymentInput: PaymentPostInput = {
+    const paymentInput = {
         pg: 'html5_inicis',
         pay_method: 'card',
         merchant_uid: 'hjinn' + `${new Date()}`, // 상품 고유번호 - userId+timestamp
         name: returnMerchantUid(price), //상품 이름
         amount: String(price),
+        buyer_email: 'TestEmail@gmail.com',
+        buyer_name: 'TEST_USER_NAME',
+        buyer_tel: '010-4242-4242',
+        buyer_addr: '서울특별시 강남구 어딘가',
     };
 
-    const FunctionTest = () => {
+    const validationCheck = (imp_uid, merchant_uid) => {
         checkValidation({
             variables: {
                 input: {
-                    imp_uid: 'imp_535881582715',
-                    merchant_uid: ' monthly_1611900876162',
+                    imp_uid: imp_uid,
+                    merchant_uid: merchant_uid,
                 },
             },
         }).then((result) => console.log(result));
     };
+    const callPaymentModule = () => {
+        IMP.request_pay(paymentInput, function (rsp) {
+            console.log(rsp);
 
-    const renderTags = ({ item, index }: { item: number; index: number }) => {
+            validationCheck(rsp.imp_uid, rsp.merchant_uid);
+        });
+    };
+
+    const renderTags = ({ item, index }) => {
         return (
             <>
                 <Button
@@ -107,9 +123,10 @@ const PayPointHomeScreen = () => {
             </Surface>
             <Button
                 title="결제"
+                disabled={price <= 0}
                 titleStyle={{ color: 'white', fontWeight: '800' }}
                 buttonStyle={{ width: 132, backgroundColor: '#FB8C00' }}
-                onPress={() => FunctionTest()}
+                onPress={() => callPaymentModule()}
             />
         </View>
     );

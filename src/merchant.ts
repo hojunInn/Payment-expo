@@ -6,5 +6,6 @@ export enum merchant {
     point_1000000 = '1,000,000_Abowa_Points',
     point_3000000 = '3,000,000_Abowa_Points',
     other = 'other',
-    monthly = 'monthly',
+    monthly = 'Monthly_Plan',
+    yearly = 'Yearly_Plan',
 }
