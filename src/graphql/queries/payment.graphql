@@ -1,0 +1,11 @@
+mutation checkValidation($input: paymentInput) {
+    checkValidation(input: $input) {
+        success
+    }
+}
+
+mutation refundPayment($input: paymentInput) {
+    refundPayment(input: $input) {
+        success
+    }
+}

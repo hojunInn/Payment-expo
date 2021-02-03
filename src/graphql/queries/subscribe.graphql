@@ -1,0 +1,10 @@
+mutation routinePayment($input: paymentInput) {
+    routinePayment(input: $input) {
+        success
+    }
+}
+mutation updateRoutinePayment($input: paymentInput) {
+    updateRoutinePayment(input: $input) {
+        success
+    }
+}

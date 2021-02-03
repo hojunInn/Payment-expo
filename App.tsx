@@ -1,6 +1,6 @@
 import { ApolloProvider } from '@apollo/client';
 import React from 'react';
-import apolloClient from './client';
+import apolloClient from './src/graphql/client';
 import Routes from './src/navigation/Routes';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 

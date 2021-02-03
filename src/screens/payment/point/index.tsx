@@ -1,12 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList, TextInput } from 'react-native';
 import { Button, Divider, Icon } from 'react-native-elements';
 import { Surface } from 'react-native-paper';
+import { useCheckValidationMutation } from '../../../graphql/generated';
+import { PaymentPostInput } from '../../../types';
 import { numberWithCommas } from '../../../utils/money';
+import { returnMerchantUid } from './functions';
 
 const PayPointHomeScreen = () => {
     const [price, setPrice] = useState(0);
     const [showOtherPrice, setShowOtherPrice] = useState(false);
+    const [checkValidation] = useCheckValidationMutation();
+
+    const paymentInput: PaymentPostInput = {
+        pg: 'html5_inicis',
+        pay_method: 'card',
+        merchant_uid: 'hjinn' + `${new Date()}`, // 상품 고유번호 - userId+timestamp
+        name: returnMerchantUid(price), //상품 이름
+        amount: String(price),
+    };
+
+    const FunctionTest = () => {
+        checkValidation({
+            variables: {
+                input: {
+                    imp_uid: 'imp_535881582715',
+                    merchant_uid: ' monthly_1611900876162',
+                },
+            },
+        }).then((result) => console.log(result));
+    };
+
     const renderTags = ({ item, index }: { item: number; index: number }) => {
         return (
             <>
@@ -85,6 +109,7 @@ const PayPointHomeScreen = () => {
                 title="결제"
                 titleStyle={{ color: 'white', fontWeight: '800' }}
                 buttonStyle={{ width: 132, backgroundColor: '#FB8C00' }}
+                onPress={() => FunctionTest()}
             />
         </View>
     );
