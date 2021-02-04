@@ -7,7 +7,7 @@ const SubscribeStack = createStackNavigator();
 
 export const SubscribeStackScreens: React.FC = () => (
     <SubscribeStack.Navigator headerMode="none">
-        <SubscribeStack.Screen name="PaySubscribe" component={PaySubscribe} />
         <SubscribeStack.Screen name="SubscribePlanHome" component={SubscribePlanHome} />
+        <SubscribeStack.Screen name="PaySubscribe" component={PaySubscribe} />
     </SubscribeStack.Navigator>
 );

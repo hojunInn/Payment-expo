@@ -8,8 +8,7 @@
         "web": "expo start --web",
         "eject": "expo eject",
         "codegen": "graphql-codegen --config codegen.yml",
-        "deploy": "gh-pages -d web-build",
-        "predeploy": "expo build:web"
+        "deploy": "gh-pages -d web-build"
     },
     "dependencies": {
         "@apollo/client": "^3.3.7",

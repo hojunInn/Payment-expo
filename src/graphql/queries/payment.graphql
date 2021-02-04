@@ -9,3 +9,8 @@ mutation refundPayment($input: paymentInput) {
         success
     }
 }
+mutation initPayment($input: initPaymentInput) {
+    initPayment(input: $input) {
+        merchant_uid
+    }
+}

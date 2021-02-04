@@ -166,6 +166,11 @@ export type CreateDeforaGroupInput = {
   boardIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
+export type UpdateDeforaGroupInput = {
+  where: InputId;
+  data?: Maybe<EditDeforaGroupInput>;
+};
+
 export type JoinDeforaGroupInput = {
   groupId: Scalars['ID'];
   workspaceMemberId: Scalars['ID'];
@@ -175,8 +180,8 @@ export type JoinDeforaGroupInput = {
   memberAttachment?: Maybe<Scalars['ID']>;
 };
 
-export type CreateDeforaGroupPayload = {
-  __typename?: 'createDeforaGroupPayload';
+export type GroupAndMemberPayload = {
+  __typename?: 'groupAndMemberPayload';
   group: Group;
   member: Member;
 };
@@ -185,6 +190,13 @@ export type MemberRoleInfoResponse = {
   __typename?: 'memberRoleInfoResponse';
   memberRole: MemberRole;
   groupList?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type EditDeforaGroupInput = {
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  attachment?: Maybe<Scalars['ID']>;
+  boardIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
 export type UpdateStatusInput = {
@@ -248,11 +260,12 @@ export type SendInvitationEmailPayload = {
 
 export type InvitationCodeInfoResponse = {
   __typename?: 'invitationCodeInfoResponse';
-  isValid?: Maybe<Scalars['Boolean']>;
+  isValid: Scalars['Boolean'];
   invitationId?: Maybe<Scalars['String']>;
   workspaceId?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   workspaceName?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
 };
 
 export type VerifySmsInput = {
@@ -264,6 +277,21 @@ export type InviteMemberInput = {
   emailList?: Maybe<Array<Scalars['String']>>;
   workspaceId: Scalars['String'];
   type?: Maybe<Scalars['String']>;
+};
+
+export type AdminInvitedInput = {
+  username: Scalars['String'];
+  email: Scalars['String'];
+  password: Scalars['String'];
+  invitationCode: Scalars['String'];
+  workspaceKey?: Maybe<Scalars['String']>;
+};
+
+export type AdminInvitedPayload = {
+  __typename?: 'adminInvitedPayload';
+  valid: Scalars['Boolean'];
+  member?: Maybe<Member>;
+  workspace?: Maybe<Workspace>;
 };
 
 export type StartQrcodeCommInput = {
@@ -316,6 +344,8 @@ export type Product = {
   tags?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
+  popular?: Maybe<Scalars['String']>;
+  recent?: Maybe<Scalars['String']>;
 };
 
 export type Brand = {
@@ -405,19 +435,6 @@ export type UserPoints = {
   userId?: Maybe<Scalars['String']>;
 };
 
-export type PurchaseList = {
-  __typename?: 'PurchaseList';
-  purchaseList?: Maybe<Array<Maybe<PurchaseInfo>>>;
-  userId?: Maybe<Scalars['String']>;
-};
-
-export type CouponStatus = {
-  __typename?: 'CouponStatus';
-  isUsable?: Maybe<Scalars['Boolean']>;
-  pinstatus?: Maybe<Scalars['String']>;
-  expdate?: Maybe<Scalars['String']>;
-};
-
 export type PurchaseCouponPayload = {
   __typename?: 'PurchaseCouponPayload';
   pointsBefore?: Maybe<Scalars['Int']>;
@@ -459,11 +476,22 @@ export type PaymentInput = {
   numOfMember?: Maybe<Scalars['Int']>;
 };
 
+export type InitPaymentInput = {
+  user_name?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
+export type InitPaymentPayload = {
+  __typename?: 'initPaymentPayload';
+  merchant_uid?: Maybe<Scalars['String']>;
+};
+
 export type JoinWorkspaceWithCodeInput = {
   invitationCode: Scalars['String'];
   phone: Scalars['String'];
   username: Scalars['String'];
   email: Scalars['String'];
+  workspaceKey?: Maybe<Scalars['String']>;
 };
 
 export type CreateWorkspaceFirstInput = {
@@ -476,8 +504,9 @@ export type CreateWorkspaceFirstInput = {
 
 export type JoinWorkSpaceResult = {
   __typename?: 'joinWorkSpaceResult';
-  workspace: Workspace;
-  member: Member;
+  valid: Scalars['Boolean'];
+  workspace?: Maybe<Workspace>;
+  member?: Maybe<Member>;
 };
 
 export type AdminAsMemberInput = {
@@ -579,7 +608,7 @@ export type Activity = {
   effectiveDate?: Maybe<Scalars['DateTime']>;
   deadline?: Maybe<Scalars['DateTime']>;
   rewardOption?: Maybe<Enum_Activity_Rewardoption>;
-  rewardAllocationAmount?: Maybe<Scalars['Float']>;
+  rewardAllocationAmount: Scalars['Float'];
   rewardPaidAmount?: Maybe<Scalars['Float']>;
   status?: Maybe<Enum_Activity_Status>;
   isShowResultAfterDeadline?: Maybe<Scalars['Boolean']>;
@@ -7532,7 +7561,7 @@ export type EditComponentRewardSettlementInstructionInput = {
   reference?: Maybe<Scalars['String']>;
 };
 
-export type Morph = SummarizeResponseData | SummarizeResponse | JoinActivityPayload | DeleteEventPayload | CreateDeforaGroupPayload | MemberRoleInfoResponse | ReportDataType | SubDataType | UpdateStatusPayload | SortedReportsPayload | SendInvitationEmailPayload | InvitationCodeInfoResponse | StartQrcodeCommPayload | MessageQrcodeCommPayload | BackupRecoveryPayload | Product | Brand | Category | PurchaseInfo | ProductListResponse | ProductInfo | UserPoints | PurchaseList | CouponStatus | PurchaseCouponPayload | RefundCouponPayload | PaymentResponsePayload | JoinWorkSpaceResult | UsersPermissionsMe | UsersPermissionsMeRole | UsersPermissionsLoginPayload | UserPermissionsPasswordPayload | Activity | ActivityConnection | ActivityAggregator | ActivityAggregatorSum | ActivityAggregatorAvg | ActivityAggregatorMin | ActivityAggregatorMax | ActivityGroupBy | ActivityConnectionId | ActivityConnection_Id | ActivityConnectionCreatedAt | ActivityConnectionUpdatedAt | ActivityConnectionName | ActivityConnectionType | ActivityConnectionDescription | ActivityConnectionIsAnonymous | ActivityConnectionEffectiveDate | ActivityConnectionDeadline | ActivityConnectionRewardOption | ActivityConnectionRewardAllocationAmount | ActivityConnectionRewardPaidAmount | ActivityConnectionStatus | ActivityConnectionIsShowResultAfterDeadline | ActivityConnectionSurvey | ActivityConnectionGroup | ActivityConnectionPoll | ActivityConnectionQuiz | ActivityConnectionWorkspace | ActivityConnectionCreator | ActivityConnectionIdea_Box | ActivityConnectionQna | ActivityConnectionBoard | CreateActivityPayload | UpdateActivityPayload | DeleteActivityPayload | Board | BoardConnection | BoardAggregator | BoardGroupBy | BoardConnectionId | BoardConnection_Id | BoardConnectionCreatedAt | BoardConnectionUpdatedAt | BoardConnectionIsTemplate | BoardConnectionName | BoardConnectionDescription | BoardConnectionWorkspace | BoardConnectionIsAnonymous | BoardConnectionCreator | CreateBoardPayload | UpdateBoardPayload | DeleteBoardPayload | Copyright | UpdateCopyrightPayload | DeleteCopyrightPayload | Customer | CustomerConnection | CustomerAggregator | CustomerGroupBy | CustomerConnectionId | CustomerConnection_Id | CustomerConnectionCreatedAt | CustomerConnectionUpdatedAt | CustomerConnectionName | CustomerConnectionEffectiveDate | CustomerConnectionSubscriptionPlan | CustomerConnectionPaymentFrequency | CustomerConnectionStatus | CreateCustomerPayload | UpdateCustomerPayload | DeleteCustomerPayload | Feeds | FeedsConnection | FeedsAggregator | FeedsGroupBy | FeedsConnectionId | FeedsConnection_Id | FeedsConnectionCreatedAt | FeedsConnectionUpdatedAt | FeedsConnectionTarget | FeedsConnectionType | FeedsConnectionContent | FeedsConnectionNavigation | FeedsConnectionTimestamp | FeedsConnectionIsRead | FeedsConnectionPublished_At | CreateFeedPayload | UpdateFeedPayload | DeleteFeedPayload | Follow | FollowConnection | FollowAggregator | FollowGroupBy | FollowConnectionId | FollowConnection_Id | FollowConnectionCreatedAt | FollowConnectionUpdatedAt | FollowConnectionMember | FollowConnectionTarget | FollowConnectionIsActive | FollowConnectionPublished_At | CreateFollowPayload | UpdateFollowPayload | DeleteFollowPayload | Group | GroupConnection | GroupAggregator | GroupGroupBy | GroupConnectionId | GroupConnection_Id | GroupConnectionCreatedAt | GroupConnectionUpdatedAt | GroupConnectionName | GroupConnectionGroupType | GroupConnectionWorkspace | GroupConnectionCreator | GroupConnectionAttachment | GroupConnectionDescription | GroupConnectionStatus | GroupConnectionTrail | GroupConnectionIsCertified | CreateGroupPayload | UpdateGroupPayload | DeleteGroupPayload | History | UpdateHistoryPayload | DeleteHistoryPayload | Home | UpdateHomePayload | DeleteHomePayload | IdeaBox | IdeaBoxConnection | IdeaBoxAggregator | IdeaBoxGroupBy | IdeaBoxConnectionId | IdeaBoxConnection_Id | IdeaBoxConnectionCreatedAt | IdeaBoxConnectionUpdatedAt | IdeaBoxConnectionIsTemplate | IdeaBoxConnectionActivity | IdeaBoxConnectionWorkspace | IdeaBoxConnectionCreator | CreateIdeaBoxPayload | UpdateIdeaBoxPayload | DeleteIdeaBoxPayload | Interaction | InteractionConnection | InteractionAggregator | InteractionGroupBy | InteractionConnectionId | InteractionConnection_Id | InteractionConnectionCreatedAt | InteractionConnectionUpdatedAt | InteractionConnectionType | InteractionConnectionActivity | InteractionConnectionGroup | InteractionConnectionPost | InteractionConnectionWorkspace | InteractionConnectionActor | CreateInteractionPayload | UpdateInteractionPayload | DeleteInteractionPayload | Invitation | InvitationConnection | InvitationAggregator | InvitationGroupBy | InvitationConnectionId | InvitationConnection_Id | InvitationConnectionCreatedAt | InvitationConnectionUpdatedAt | InvitationConnectionScope | InvitationConnectionSentDate | InvitationConnectionExpiredDate | CreateInvitationPayload | UpdateInvitationPayload | DeleteInvitationPayload | MemberInteraction | MemberInteractionConnection | MemberInteractionAggregator | MemberInteractionAggregatorSum | MemberInteractionAggregatorAvg | MemberInteractionAggregatorMin | MemberInteractionAggregatorMax | MemberInteractionGroupBy | MemberInteractionConnectionId | MemberInteractionConnection_Id | MemberInteractionConnectionCreatedAt | MemberInteractionConnectionUpdatedAt | MemberInteractionConnectionType | MemberInteractionConnectionQuantity | MemberInteractionConnectionReceiver | MemberInteractionConnectionActivity | MemberInteractionConnectionWorkspace | MemberInteractionConnectionActor | CreateMemberInteractionPayload | UpdateMemberInteractionPayload | DeleteMemberInteractionPayload | MemberRole | MemberRoleConnection | MemberRoleAggregator | MemberRoleGroupBy | MemberRoleConnectionId | MemberRoleConnection_Id | MemberRoleConnectionCreatedAt | MemberRoleConnectionUpdatedAt | MemberRoleConnectionType | MemberRoleConnectionScope | MemberRoleConnectionActivity | MemberRoleConnectionGroup | MemberRoleConnectionWorkspace | MemberRoleConnectionMember | MemberRoleConnectionStatus | MemberRoleConnectionUsername | CreateMemberRolePayload | UpdateMemberRolePayload | DeleteMemberRolePayload | Member | MemberConnection | MemberAggregator | MemberAggregatorSum | MemberAggregatorAvg | MemberAggregatorMin | MemberAggregatorMax | MemberGroupBy | MemberConnectionId | MemberConnection_Id | MemberConnectionCreatedAt | MemberConnectionUpdatedAt | MemberConnectionUsername | MemberConnectionUserClass | MemberConnectionAddress | MemberConnectionBalance | MemberConnectionAvatar | MemberConnectionLastAccessTime | MemberConnectionUser | MemberConnectionEmail | CreateMemberPayload | UpdateMemberPayload | DeleteMemberPayload | PointPurchase | PointPurchaseConnection | PointPurchaseAggregator | PointPurchaseAggregatorSum | PointPurchaseAggregatorAvg | PointPurchaseAggregatorMin | PointPurchaseAggregatorMax | PointPurchaseGroupBy | PointPurchaseConnectionId | PointPurchaseConnection_Id | PointPurchaseConnectionCreatedAt | PointPurchaseConnectionUpdatedAt | PointPurchaseConnectionPointAmount | PointPurchaseConnectionCurrencyAmount | PointPurchaseConnectionCurrencyUnit | PointPurchaseConnectionPurchaseDate | PointPurchaseConnectionSettlementInstruction | PointPurchaseConnectionTransaction | CreatePointPurchasePayload | UpdatePointPurchasePayload | DeletePointPurchasePayload | Poll | PollConnection | PollAggregator | PollGroupBy | PollConnectionId | PollConnection_Id | PollConnectionCreatedAt | PollConnectionUpdatedAt | PollConnectionIsTemplate | PollConnectionActivity | PollConnectionTemplate | PollConnectionWorkspace | PollConnectionCreator | CreatePollPayload | UpdatePollPayload | DeletePollPayload | Post | PostConnection | PostAggregator | PostAggregatorSum | PostAggregatorAvg | PostAggregatorMin | PostAggregatorMax | PostGroupBy | PostConnectionId | PostConnection_Id | PostConnectionCreatedAt | PostConnectionUpdatedAt | PostConnectionType | PostConnectionActivity | PostConnectionParentPost | PostConnectionWriter | PostConnectionMyScore | PostConnectionStatus | CreatePostPayload | UpdatePostPayload | DeletePostPayload | Qna | QnaConnection | QnaAggregator | QnaGroupBy | QnaConnectionId | QnaConnection_Id | QnaConnectionCreatedAt | QnaConnectionUpdatedAt | QnaConnectionIsTemplate | QnaConnectionActivity | QnaConnectionWorkspace | QnaConnectionCreator | CreateQnaPayload | UpdateQnaPayload | DeleteQnaPayload | QrcodeComm | QrcodeCommConnection | QrcodeCommAggregator | QrcodeCommAggregatorSum | QrcodeCommAggregatorAvg | QrcodeCommAggregatorMin | QrcodeCommAggregatorMax | QrcodeCommGroupBy | QrcodeCommConnectionId | QrcodeCommConnection_Id | QrcodeCommConnectionCreatedAt | QrcodeCommConnectionUpdatedAt | QrcodeCommConnectionPubKey | QrcodeCommConnectionMessage | QrcodeCommConnectionExpireAt | CreateQrcodeCommPayload | UpdateQrcodeCommPayload | DeleteQrcodeCommPayload | Question | QuestionConnection | QuestionAggregator | QuestionAggregatorSum | QuestionAggregatorAvg | QuestionAggregatorMin | QuestionAggregatorMax | QuestionGroupBy | QuestionConnectionId | QuestionConnection_Id | QuestionConnectionCreatedAt | QuestionConnectionUpdatedAt | QuestionConnectionTitle | QuestionConnectionDescription | QuestionConnectionKey | QuestionConnectionIsRequired | QuestionConnectionType | QuestionConnectionTags | QuestionConnectionSequence | QuestionConnectionPoint | QuestionConnectionSurvey | QuestionConnectionPoll | QuestionConnectionQuiz | QuestionConnectionWorkspace | QuestionConnectionStatus | CreateQuestionPayload | UpdateQuestionPayload | DeleteQuestionPayload | Quiz | QuizConnection | QuizAggregator | QuizGroupBy | QuizConnectionId | QuizConnection_Id | QuizConnectionCreatedAt | QuizConnectionUpdatedAt | QuizConnectionIsTemplate | QuizConnectionActivity | QuizConnectionWorkspace | QuizConnectionTemplate | QuizConnectionCreator | CreateQuizPayload | UpdateQuizPayload | DeleteQuizPayload | Recovery | RecoveryConnection | RecoveryAggregator | RecoveryGroupBy | RecoveryConnectionId | RecoveryConnection_Id | RecoveryConnectionCreatedAt | RecoveryConnectionUpdatedAt | RecoveryConnectionAddress | RecoveryConnectionEncryptedData | CreateRecoveryPayload | UpdateRecoveryPayload | DeleteRecoveryPayload | Survey | SurveyConnection | SurveyAggregator | SurveyGroupBy | SurveyConnectionId | SurveyConnection_Id | SurveyConnectionCreatedAt | SurveyConnectionUpdatedAt | SurveyConnectionIsTemplate | SurveyConnectionActivity | SurveyConnectionWorkspace | SurveyConnectionTemplate | SurveyConnectionCreator | CreateSurveyPayload | UpdateSurveyPayload | DeleteSurveyPayload | Trails | TrailsConnection | TrailsAggregator | TrailsGroupBy | TrailsConnectionId | TrailsConnection_Id | TrailsConnectionCreatedAt | TrailsConnectionUpdatedAt | TrailsConnectionCategory | TrailsConnectionCategorySub | TrailsConnectionAction | TrailsConnectionDate | TrailsConnectionUser | TrailsConnectionTarget | TrailsConnectionDetailInfo | TrailsConnectionWorkspace | TrailsConnectionActivity | TrailsConnectionPost | TrailsConnectionGroup | TrailsConnectionKey | TrailsConnectionPublished_At | CreateTrailPayload | UpdateTrailPayload | DeleteTrailPayload | Transaction | TransactionConnection | TransactionAggregator | TransactionAggregatorSum | TransactionAggregatorAvg | TransactionAggregatorMin | TransactionAggregatorMax | TransactionGroupBy | TransactionConnectionId | TransactionConnection_Id | TransactionConnectionCreatedAt | TransactionConnectionUpdatedAt | TransactionConnectionSenderAddress | TransactionConnectionReceiverAddress | TransactionConnectionTransactionType | TransactionConnectionTransactionDate | TransactionConnectionSettlementDate | TransactionConnectionAmount | TransactionConnectionTransactionStatus | TransactionConnectionReferenceActivity | TransactionConnectionReferencePurchase | CreateTransactionPayload | UpdateTransactionPayload | DeleteTransactionPayload | Workspace | WorkspaceConnection | WorkspaceAggregator | WorkspaceAggregatorSum | WorkspaceAggregatorAvg | WorkspaceAggregatorMin | WorkspaceAggregatorMax | WorkspaceGroupBy | WorkspaceConnectionId | WorkspaceConnection_Id | WorkspaceConnectionCreatedAt | WorkspaceConnectionUpdatedAt | WorkspaceConnectionName | WorkspaceConnectionAddress | WorkspaceConnectionBalance | WorkspaceConnectionIsEncrypted | WorkspaceConnectionEncryptionKey | WorkspaceConnectionSubscriptionPlan | WorkspaceConnectionStatus | WorkspaceConnectionDescription | WorkspaceConnectionCreator | WorkspaceConnectionAvatar | WorkspaceConnectionWorkspaceKey | CreateWorkspacePayload | UpdateWorkspacePayload | DeleteWorkspacePayload | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileAggregatorSum | UploadFileAggregatorAvg | UploadFileAggregatorMin | UploadFileAggregatorMax | UploadFileGroupBy | UploadFileConnectionId | UploadFileConnection_Id | UploadFileConnectionCreatedAt | UploadFileConnectionUpdatedAt | UploadFileConnectionName | UploadFileConnectionAlternativeText | UploadFileConnectionCaption | UploadFileConnectionWidth | UploadFileConnectionHeight | UploadFileConnectionFormats | UploadFileConnectionHash | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionPreviewUrl | UploadFileConnectionProvider | UploadFileConnectionProvider_Metadata | DeleteFilePayload | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnectionId | UsersPermissionsRoleConnection_Id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | CreateRolePayload | UpdateRolePayload | DeleteRolePayload | UsersPermissionsUser | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnectionId | UsersPermissionsUserConnection_Id | UsersPermissionsUserConnectionCreatedAt | UsersPermissionsUserConnectionUpdatedAt | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole | UsersPermissionsUserConnectionMember | CreateUserPayload | UpdateUserPayload | DeleteUserPayload | ComponentActivityChoiceOptionList | ComponentActivityChoiceOption | ComponentActivityCustomLabel | ComponentActivityIdeaBoxOption | ComponentActivityNumberOfParticipant | ComponentActivityPollOption | ComponentActivityQnaOption | ComponentActivityQuizOption | ComponentActivityScaleOption | ComponentActivitySurveyOption | ComponentActivityTemplateOption | ComponentActivityTextOption | ComponentActivityTier | ComponentCommonContact | ComponentCommonRichtextInstruction | ComponentCommonRsvp | ComponentCommonSimpleInstruction | ComponentFeedCotentContent | ComponentHomepageCompanyEvent | ComponentInteractionLike | ComponentInteractionRead | ComponentInteractionReport | ComponentNavigationNavigation | ComponentPostAnswerList | ComponentPostArticle | ComponentPostCommentOnActivity | ComponentPostCommentOnPost | ComponentPostItem | ComponentPostMultipleChoiceAnswer | ComponentPostProposal | ComponentPostQnaQuestion | ComponentPostReply | ComponentPostScaleAnswer | ComponentPostSelection | ComponentPostShortAnswer | ComponentPostSingleChoiceAnswer | ComponentPostTextAnswer | ComponentRewardRewardSetting | ComponentRewardSettlementInstruction;
+export type Morph = SummarizeResponseData | SummarizeResponse | JoinActivityPayload | DeleteEventPayload | GroupAndMemberPayload | MemberRoleInfoResponse | ReportDataType | SubDataType | UpdateStatusPayload | SortedReportsPayload | SendInvitationEmailPayload | InvitationCodeInfoResponse | AdminInvitedPayload | StartQrcodeCommPayload | MessageQrcodeCommPayload | BackupRecoveryPayload | Product | Brand | Category | PurchaseInfo | ProductListResponse | ProductInfo | UserPoints | PurchaseCouponPayload | RefundCouponPayload | PaymentResponsePayload | InitPaymentPayload | JoinWorkSpaceResult | UsersPermissionsMe | UsersPermissionsMeRole | UsersPermissionsLoginPayload | UserPermissionsPasswordPayload | Activity | ActivityConnection | ActivityAggregator | ActivityAggregatorSum | ActivityAggregatorAvg | ActivityAggregatorMin | ActivityAggregatorMax | ActivityGroupBy | ActivityConnectionId | ActivityConnection_Id | ActivityConnectionCreatedAt | ActivityConnectionUpdatedAt | ActivityConnectionName | ActivityConnectionType | ActivityConnectionDescription | ActivityConnectionIsAnonymous | ActivityConnectionEffectiveDate | ActivityConnectionDeadline | ActivityConnectionRewardOption | ActivityConnectionRewardAllocationAmount | ActivityConnectionRewardPaidAmount | ActivityConnectionStatus | ActivityConnectionIsShowResultAfterDeadline | ActivityConnectionSurvey | ActivityConnectionGroup | ActivityConnectionPoll | ActivityConnectionQuiz | ActivityConnectionWorkspace | ActivityConnectionCreator | ActivityConnectionIdea_Box | ActivityConnectionQna | ActivityConnectionBoard | CreateActivityPayload | UpdateActivityPayload | DeleteActivityPayload | Board | BoardConnection | BoardAggregator | BoardGroupBy | BoardConnectionId | BoardConnection_Id | BoardConnectionCreatedAt | BoardConnectionUpdatedAt | BoardConnectionIsTemplate | BoardConnectionName | BoardConnectionDescription | BoardConnectionWorkspace | BoardConnectionIsAnonymous | BoardConnectionCreator | CreateBoardPayload | UpdateBoardPayload | DeleteBoardPayload | Copyright | UpdateCopyrightPayload | DeleteCopyrightPayload | Customer | CustomerConnection | CustomerAggregator | CustomerGroupBy | CustomerConnectionId | CustomerConnection_Id | CustomerConnectionCreatedAt | CustomerConnectionUpdatedAt | CustomerConnectionName | CustomerConnectionEffectiveDate | CustomerConnectionSubscriptionPlan | CustomerConnectionPaymentFrequency | CustomerConnectionStatus | CreateCustomerPayload | UpdateCustomerPayload | DeleteCustomerPayload | Feeds | FeedsConnection | FeedsAggregator | FeedsGroupBy | FeedsConnectionId | FeedsConnection_Id | FeedsConnectionCreatedAt | FeedsConnectionUpdatedAt | FeedsConnectionTarget | FeedsConnectionType | FeedsConnectionContent | FeedsConnectionNavigation | FeedsConnectionTimestamp | FeedsConnectionIsRead | FeedsConnectionPublished_At | CreateFeedPayload | UpdateFeedPayload | DeleteFeedPayload | Follow | FollowConnection | FollowAggregator | FollowGroupBy | FollowConnectionId | FollowConnection_Id | FollowConnectionCreatedAt | FollowConnectionUpdatedAt | FollowConnectionMember | FollowConnectionTarget | FollowConnectionIsActive | FollowConnectionPublished_At | CreateFollowPayload | UpdateFollowPayload | DeleteFollowPayload | Group | GroupConnection | GroupAggregator | GroupGroupBy | GroupConnectionId | GroupConnection_Id | GroupConnectionCreatedAt | GroupConnectionUpdatedAt | GroupConnectionName | GroupConnectionGroupType | GroupConnectionWorkspace | GroupConnectionCreator | GroupConnectionAttachment | GroupConnectionDescription | GroupConnectionStatus | GroupConnectionTrail | GroupConnectionIsCertified | CreateGroupPayload | UpdateGroupPayload | DeleteGroupPayload | History | UpdateHistoryPayload | DeleteHistoryPayload | Home | UpdateHomePayload | DeleteHomePayload | IdeaBox | IdeaBoxConnection | IdeaBoxAggregator | IdeaBoxGroupBy | IdeaBoxConnectionId | IdeaBoxConnection_Id | IdeaBoxConnectionCreatedAt | IdeaBoxConnectionUpdatedAt | IdeaBoxConnectionIsTemplate | IdeaBoxConnectionActivity | IdeaBoxConnectionWorkspace | IdeaBoxConnectionCreator | CreateIdeaBoxPayload | UpdateIdeaBoxPayload | DeleteIdeaBoxPayload | Interaction | InteractionConnection | InteractionAggregator | InteractionGroupBy | InteractionConnectionId | InteractionConnection_Id | InteractionConnectionCreatedAt | InteractionConnectionUpdatedAt | InteractionConnectionType | InteractionConnectionActivity | InteractionConnectionGroup | InteractionConnectionPost | InteractionConnectionWorkspace | InteractionConnectionActor | CreateInteractionPayload | UpdateInteractionPayload | DeleteInteractionPayload | Invitation | InvitationConnection | InvitationAggregator | InvitationGroupBy | InvitationConnectionId | InvitationConnection_Id | InvitationConnectionCreatedAt | InvitationConnectionUpdatedAt | InvitationConnectionScope | InvitationConnectionSentDate | InvitationConnectionExpiredDate | CreateInvitationPayload | UpdateInvitationPayload | DeleteInvitationPayload | MemberInteraction | MemberInteractionConnection | MemberInteractionAggregator | MemberInteractionAggregatorSum | MemberInteractionAggregatorAvg | MemberInteractionAggregatorMin | MemberInteractionAggregatorMax | MemberInteractionGroupBy | MemberInteractionConnectionId | MemberInteractionConnection_Id | MemberInteractionConnectionCreatedAt | MemberInteractionConnectionUpdatedAt | MemberInteractionConnectionType | MemberInteractionConnectionQuantity | MemberInteractionConnectionReceiver | MemberInteractionConnectionActivity | MemberInteractionConnectionWorkspace | MemberInteractionConnectionActor | CreateMemberInteractionPayload | UpdateMemberInteractionPayload | DeleteMemberInteractionPayload | MemberRole | MemberRoleConnection | MemberRoleAggregator | MemberRoleGroupBy | MemberRoleConnectionId | MemberRoleConnection_Id | MemberRoleConnectionCreatedAt | MemberRoleConnectionUpdatedAt | MemberRoleConnectionType | MemberRoleConnectionScope | MemberRoleConnectionActivity | MemberRoleConnectionGroup | MemberRoleConnectionWorkspace | MemberRoleConnectionMember | MemberRoleConnectionStatus | MemberRoleConnectionUsername | CreateMemberRolePayload | UpdateMemberRolePayload | DeleteMemberRolePayload | Member | MemberConnection | MemberAggregator | MemberAggregatorSum | MemberAggregatorAvg | MemberAggregatorMin | MemberAggregatorMax | MemberGroupBy | MemberConnectionId | MemberConnection_Id | MemberConnectionCreatedAt | MemberConnectionUpdatedAt | MemberConnectionUsername | MemberConnectionUserClass | MemberConnectionAddress | MemberConnectionBalance | MemberConnectionAvatar | MemberConnectionLastAccessTime | MemberConnectionUser | MemberConnectionEmail | CreateMemberPayload | UpdateMemberPayload | DeleteMemberPayload | PointPurchase | PointPurchaseConnection | PointPurchaseAggregator | PointPurchaseAggregatorSum | PointPurchaseAggregatorAvg | PointPurchaseAggregatorMin | PointPurchaseAggregatorMax | PointPurchaseGroupBy | PointPurchaseConnectionId | PointPurchaseConnection_Id | PointPurchaseConnectionCreatedAt | PointPurchaseConnectionUpdatedAt | PointPurchaseConnectionPointAmount | PointPurchaseConnectionCurrencyAmount | PointPurchaseConnectionCurrencyUnit | PointPurchaseConnectionPurchaseDate | PointPurchaseConnectionSettlementInstruction | PointPurchaseConnectionTransaction | CreatePointPurchasePayload | UpdatePointPurchasePayload | DeletePointPurchasePayload | Poll | PollConnection | PollAggregator | PollGroupBy | PollConnectionId | PollConnection_Id | PollConnectionCreatedAt | PollConnectionUpdatedAt | PollConnectionIsTemplate | PollConnectionActivity | PollConnectionTemplate | PollConnectionWorkspace | PollConnectionCreator | CreatePollPayload | UpdatePollPayload | DeletePollPayload | Post | PostConnection | PostAggregator | PostAggregatorSum | PostAggregatorAvg | PostAggregatorMin | PostAggregatorMax | PostGroupBy | PostConnectionId | PostConnection_Id | PostConnectionCreatedAt | PostConnectionUpdatedAt | PostConnectionType | PostConnectionActivity | PostConnectionParentPost | PostConnectionWriter | PostConnectionMyScore | PostConnectionStatus | CreatePostPayload | UpdatePostPayload | DeletePostPayload | Qna | QnaConnection | QnaAggregator | QnaGroupBy | QnaConnectionId | QnaConnection_Id | QnaConnectionCreatedAt | QnaConnectionUpdatedAt | QnaConnectionIsTemplate | QnaConnectionActivity | QnaConnectionWorkspace | QnaConnectionCreator | CreateQnaPayload | UpdateQnaPayload | DeleteQnaPayload | QrcodeComm | QrcodeCommConnection | QrcodeCommAggregator | QrcodeCommAggregatorSum | QrcodeCommAggregatorAvg | QrcodeCommAggregatorMin | QrcodeCommAggregatorMax | QrcodeCommGroupBy | QrcodeCommConnectionId | QrcodeCommConnection_Id | QrcodeCommConnectionCreatedAt | QrcodeCommConnectionUpdatedAt | QrcodeCommConnectionPubKey | QrcodeCommConnectionMessage | QrcodeCommConnectionExpireAt | CreateQrcodeCommPayload | UpdateQrcodeCommPayload | DeleteQrcodeCommPayload | Question | QuestionConnection | QuestionAggregator | QuestionAggregatorSum | QuestionAggregatorAvg | QuestionAggregatorMin | QuestionAggregatorMax | QuestionGroupBy | QuestionConnectionId | QuestionConnection_Id | QuestionConnectionCreatedAt | QuestionConnectionUpdatedAt | QuestionConnectionTitle | QuestionConnectionDescription | QuestionConnectionKey | QuestionConnectionIsRequired | QuestionConnectionType | QuestionConnectionTags | QuestionConnectionSequence | QuestionConnectionPoint | QuestionConnectionSurvey | QuestionConnectionPoll | QuestionConnectionQuiz | QuestionConnectionWorkspace | QuestionConnectionStatus | CreateQuestionPayload | UpdateQuestionPayload | DeleteQuestionPayload | Quiz | QuizConnection | QuizAggregator | QuizGroupBy | QuizConnectionId | QuizConnection_Id | QuizConnectionCreatedAt | QuizConnectionUpdatedAt | QuizConnectionIsTemplate | QuizConnectionActivity | QuizConnectionWorkspace | QuizConnectionTemplate | QuizConnectionCreator | CreateQuizPayload | UpdateQuizPayload | DeleteQuizPayload | Recovery | RecoveryConnection | RecoveryAggregator | RecoveryGroupBy | RecoveryConnectionId | RecoveryConnection_Id | RecoveryConnectionCreatedAt | RecoveryConnectionUpdatedAt | RecoveryConnectionAddress | RecoveryConnectionEncryptedData | CreateRecoveryPayload | UpdateRecoveryPayload | DeleteRecoveryPayload | Survey | SurveyConnection | SurveyAggregator | SurveyGroupBy | SurveyConnectionId | SurveyConnection_Id | SurveyConnectionCreatedAt | SurveyConnectionUpdatedAt | SurveyConnectionIsTemplate | SurveyConnectionActivity | SurveyConnectionWorkspace | SurveyConnectionTemplate | SurveyConnectionCreator | CreateSurveyPayload | UpdateSurveyPayload | DeleteSurveyPayload | Trails | TrailsConnection | TrailsAggregator | TrailsGroupBy | TrailsConnectionId | TrailsConnection_Id | TrailsConnectionCreatedAt | TrailsConnectionUpdatedAt | TrailsConnectionCategory | TrailsConnectionCategorySub | TrailsConnectionAction | TrailsConnectionDate | TrailsConnectionUser | TrailsConnectionTarget | TrailsConnectionDetailInfo | TrailsConnectionWorkspace | TrailsConnectionActivity | TrailsConnectionPost | TrailsConnectionGroup | TrailsConnectionKey | TrailsConnectionPublished_At | CreateTrailPayload | UpdateTrailPayload | DeleteTrailPayload | Transaction | TransactionConnection | TransactionAggregator | TransactionAggregatorSum | TransactionAggregatorAvg | TransactionAggregatorMin | TransactionAggregatorMax | TransactionGroupBy | TransactionConnectionId | TransactionConnection_Id | TransactionConnectionCreatedAt | TransactionConnectionUpdatedAt | TransactionConnectionSenderAddress | TransactionConnectionReceiverAddress | TransactionConnectionTransactionType | TransactionConnectionTransactionDate | TransactionConnectionSettlementDate | TransactionConnectionAmount | TransactionConnectionTransactionStatus | TransactionConnectionReferenceActivity | TransactionConnectionReferencePurchase | CreateTransactionPayload | UpdateTransactionPayload | DeleteTransactionPayload | Workspace | WorkspaceConnection | WorkspaceAggregator | WorkspaceAggregatorSum | WorkspaceAggregatorAvg | WorkspaceAggregatorMin | WorkspaceAggregatorMax | WorkspaceGroupBy | WorkspaceConnectionId | WorkspaceConnection_Id | WorkspaceConnectionCreatedAt | WorkspaceConnectionUpdatedAt | WorkspaceConnectionName | WorkspaceConnectionAddress | WorkspaceConnectionBalance | WorkspaceConnectionIsEncrypted | WorkspaceConnectionEncryptionKey | WorkspaceConnectionSubscriptionPlan | WorkspaceConnectionStatus | WorkspaceConnectionDescription | WorkspaceConnectionCreator | WorkspaceConnectionAvatar | WorkspaceConnectionWorkspaceKey | CreateWorkspacePayload | UpdateWorkspacePayload | DeleteWorkspacePayload | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileAggregatorSum | UploadFileAggregatorAvg | UploadFileAggregatorMin | UploadFileAggregatorMax | UploadFileGroupBy | UploadFileConnectionId | UploadFileConnection_Id | UploadFileConnectionCreatedAt | UploadFileConnectionUpdatedAt | UploadFileConnectionName | UploadFileConnectionAlternativeText | UploadFileConnectionCaption | UploadFileConnectionWidth | UploadFileConnectionHeight | UploadFileConnectionFormats | UploadFileConnectionHash | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionPreviewUrl | UploadFileConnectionProvider | UploadFileConnectionProvider_Metadata | DeleteFilePayload | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnectionId | UsersPermissionsRoleConnection_Id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | CreateRolePayload | UpdateRolePayload | DeleteRolePayload | UsersPermissionsUser | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnectionId | UsersPermissionsUserConnection_Id | UsersPermissionsUserConnectionCreatedAt | UsersPermissionsUserConnectionUpdatedAt | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole | UsersPermissionsUserConnectionMember | CreateUserPayload | UpdateUserPayload | DeleteUserPayload | ComponentActivityChoiceOptionList | ComponentActivityChoiceOption | ComponentActivityCustomLabel | ComponentActivityIdeaBoxOption | ComponentActivityNumberOfParticipant | ComponentActivityPollOption | ComponentActivityQnaOption | ComponentActivityQuizOption | ComponentActivityScaleOption | ComponentActivitySurveyOption | ComponentActivityTemplateOption | ComponentActivityTextOption | ComponentActivityTier | ComponentCommonContact | ComponentCommonRichtextInstruction | ComponentCommonRsvp | ComponentCommonSimpleInstruction | ComponentFeedCotentContent | ComponentHomepageCompanyEvent | ComponentInteractionLike | ComponentInteractionRead | ComponentInteractionReport | ComponentNavigationNavigation | ComponentPostAnswerList | ComponentPostArticle | ComponentPostCommentOnActivity | ComponentPostCommentOnPost | ComponentPostItem | ComponentPostMultipleChoiceAnswer | ComponentPostProposal | ComponentPostQnaQuestion | ComponentPostReply | ComponentPostScaleAnswer | ComponentPostSelection | ComponentPostShortAnswer | ComponentPostSingleChoiceAnswer | ComponentPostTextAnswer | ComponentRewardRewardSetting | ComponentRewardSettlementInstruction;
 
 export type InputId = {
   id: Scalars['ID'];
@@ -7663,8 +7692,8 @@ export type Query = {
   userPoints?: Maybe<UserPoints>;
   brandList?: Maybe<Array<Maybe<Brand>>>;
   categoryList?: Maybe<Array<Maybe<Category>>>;
-  purchaseList?: Maybe<PurchaseList>;
-  couponStatus?: Maybe<CouponStatus>;
+  purchaseList?: Maybe<Array<Maybe<PurchaseInfo>>>;
+  couponInfo?: Maybe<PurchaseInfo>;
   workspaceNameList?: Maybe<Array<Maybe<Scalars['String']>>>;
   userNameList?: Maybe<Array<Maybe<Scalars['String']>>>;
   userEmailList?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -8395,7 +8424,7 @@ export type QueryPurchaseListArgs = {
 };
 
 
-export type QueryCouponStatusArgs = {
+export type QueryCouponInfoArgs = {
   pinNumber: Scalars['String'];
 };
 
@@ -8426,7 +8455,10 @@ export type Mutation = {
    * @deprecated Please use createDeforaGroup instead
    */
   createGroup?: Maybe<CreateGroupPayload>;
-  /** Update an existing Group */
+  /**
+   * Update an existing Group
+   * @deprecated Please use updateDeforaGroup instead
+   */
   updateGroup?: Maybe<UpdateGroupPayload>;
   /** Delete an existing Group */
   deleteGroup?: Maybe<DeleteGroupPayload>;
@@ -8522,12 +8554,14 @@ export type Mutation = {
   joinActivity?: Maybe<JoinActivityPayload>;
   deleteEvent?: Maybe<DeleteEventPayload>;
   sendPayloadToWeb?: Maybe<Scalars['Boolean']>;
-  createDeforaGroup?: Maybe<CreateDeforaGroupPayload>;
-  joinDeforaGroup?: Maybe<CreateDeforaGroupPayload>;
+  createDeforaGroup: Group;
+  joinDeforaGroup?: Maybe<GroupAndMemberPayload>;
+  updateDeforaGroup: Group;
   updateStatus?: Maybe<UpdateStatusPayload>;
   sendInvitationEmail?: Maybe<Scalars['Boolean']>;
   verifySMSCode?: Maybe<Scalars['Boolean']>;
   inviteMember?: Maybe<Invitation>;
+  adminInvited?: Maybe<AdminInvitedPayload>;
   memberRemove?: Maybe<Scalars['Boolean']>;
   memberReinvite?: Maybe<Scalars['Boolean']>;
   startQrcodeComm?: Maybe<StartQrcodeCommPayload>;
@@ -8540,6 +8574,7 @@ export type Mutation = {
   refundPayment?: Maybe<PaymentResponsePayload>;
   checkRoutinePayment?: Maybe<PaymentResponsePayload>;
   updateRoutinePayment?: Maybe<PaymentResponsePayload>;
+  initPayment?: Maybe<InitPaymentPayload>;
   joinWorkspaceWithCode?: Maybe<JoinWorkSpaceResult>;
   createWorkspaceFirst?: Maybe<JoinWorkSpaceResult>;
   adminAsMember?: Maybe<JoinWorkSpaceResult>;
@@ -9000,6 +9035,11 @@ export type MutationJoinDeforaGroupArgs = {
 };
 
 
+export type MutationUpdateDeforaGroupArgs = {
+  input: UpdateDeforaGroupInput;
+};
+
+
 export type MutationUpdateStatusArgs = {
   input?: Maybe<UpdateStatusInput>;
 };
@@ -9017,6 +9057,11 @@ export type MutationVerifySmsCodeArgs = {
 
 export type MutationInviteMemberArgs = {
   input?: Maybe<InviteMemberInput>;
+};
+
+
+export type MutationAdminInvitedArgs = {
+  input?: Maybe<AdminInvitedInput>;
 };
 
 
@@ -9078,6 +9123,11 @@ export type MutationCheckRoutinePaymentArgs = {
 
 export type MutationUpdateRoutinePaymentArgs = {
   input?: Maybe<PaymentInput>;
+};
+
+
+export type MutationInitPaymentArgs = {
+  input?: Maybe<InitPaymentInput>;
 };
 
 
@@ -9188,6 +9238,19 @@ export type RefundPaymentMutation = (
   )> }
 );
 
+export type InitPaymentMutationVariables = Exact<{
+  input?: Maybe<InitPaymentInput>;
+}>;
+
+
+export type InitPaymentMutation = (
+  { __typename?: 'Mutation' }
+  & { initPayment?: Maybe<(
+    { __typename?: 'initPaymentPayload' }
+    & Pick<InitPaymentPayload, 'merchant_uid'>
+  )> }
+);
+
 export type RoutinePaymentMutationVariables = Exact<{
   input?: Maybe<PaymentInput>;
 }>;
@@ -9279,6 +9342,38 @@ export function useRefundPaymentMutation(baseOptions?: Apollo.MutationHookOption
 export type RefundPaymentMutationHookResult = ReturnType<typeof useRefundPaymentMutation>;
 export type RefundPaymentMutationResult = Apollo.MutationResult<RefundPaymentMutation>;
 export type RefundPaymentMutationOptions = Apollo.BaseMutationOptions<RefundPaymentMutation, RefundPaymentMutationVariables>;
+export const InitPaymentDocument = gql`
+    mutation initPayment($input: initPaymentInput) {
+  initPayment(input: $input) {
+    merchant_uid
+  }
+}
+    `;
+export type InitPaymentMutationFn = Apollo.MutationFunction<InitPaymentMutation, InitPaymentMutationVariables>;
+
+/**
+ * __useInitPaymentMutation__
+ *
+ * To run a mutation, you first call `useInitPaymentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInitPaymentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [initPaymentMutation, { data, loading, error }] = useInitPaymentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useInitPaymentMutation(baseOptions?: Apollo.MutationHookOptions<InitPaymentMutation, InitPaymentMutationVariables>) {
+        return Apollo.useMutation<InitPaymentMutation, InitPaymentMutationVariables>(InitPaymentDocument, baseOptions);
+      }
+export type InitPaymentMutationHookResult = ReturnType<typeof useInitPaymentMutation>;
+export type InitPaymentMutationResult = Apollo.MutationResult<InitPaymentMutation>;
+export type InitPaymentMutationOptions = Apollo.BaseMutationOptions<InitPaymentMutation, InitPaymentMutationVariables>;
 export const RoutinePaymentDocument = gql`
     mutation routinePayment($input: paymentInput) {
   routinePayment(input: $input) {

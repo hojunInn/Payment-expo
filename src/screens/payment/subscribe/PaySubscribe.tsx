@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, useWindowDimensions, View } from 'react-native';
 import { SubscriptionData } from '../../../components/types';
 import { Surface, Switch } from 'react-native-paper';
 import { Button, Divider, Header, Icon } from 'react-native-elements';
@@ -8,8 +8,13 @@ import { returnDate } from '../../../utils/datetime';
 import { numberWithCommas } from '../../../utils/money';
 
 import jQuery from 'jquery';
-import { useCheckValidationMutation, useRoutinePaymentMutation } from '../../../graphql/generated';
+import {
+    useCheckValidationMutation,
+    useInitPaymentMutation,
+    useRoutinePaymentMutation,
+} from '../../../graphql/generated';
 import { returnMerchantUid } from '../point/functions';
+import { Linking } from 'expo';
 window.$ = window.jQuery = jQuery;
 
 var IMP = window.IMP;
@@ -23,9 +28,12 @@ const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) 
     const [totalPrice, setTotalPrice] = useState(0);
     const [startDate, setStartDate] = useState(new Date());
     const [dueDate, setDueDate] = useState(new Date());
+    const [showDateInput, setShowDateInput] = useState(false);
 
     const [routinePay] = useRoutinePaymentMutation();
     const [checkValidation] = useCheckValidationMutation();
+    const [initPayment] = useInitPaymentMutation();
+    const windowDimensions = useWindowDimensions();
 
     const paymentInput = {
         pg: 'html5_inicis',
@@ -52,11 +60,19 @@ const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) 
     const callPaymentModule = (type: 'monthly' | 'yearly') => {
         if (type === 'monthly') {
             //Buyer의 UserName을 넣는다.
-            (paymentInput.customer_uid = 'hj'), (paymentInput.name = type);
+            setShowDateInput(false)((paymentInput.customer_uid = 'hj')), (paymentInput.name = type);
         }
+
+        initPayment({
+            variables: {
+                input: {
+                    user_name: 'hj',
+                },
+            },
+        });
+
         IMP.request_pay(paymentInput, function (rsp) {
             console.log(rsp);
-
             validationCheck(rsp.imp_uid, rsp.merchant_uid);
         });
     };
@@ -93,38 +109,45 @@ const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) 
     return (
         <>
             <Header
-                containerStyle={{ backgroundColor: '#FB8C00', borderBottomWidth: 1 }}
-                leftComponent={
+                containerStyle={{ borderBottomWidth: 1, backgroundColor: '#ffffff' }}
+                rightComponent={
                     <Button
-                        onPress={() => navigation.goBack()}
-                        icon={<Icon type="font-awesome" size={30} name="angle-left" color="white" />}
+                        onPress={() => Linking.openURL('https//localhost:19006')}
+                        icon={<Icon size={30} name="close" color="black" />}
                         type="clear"
                     />
                 }
-                centerComponent={<Text style={{ fontSize: 20, fontWeight: '700', color: 'white' }}>결제 페이지</Text>}
+                centerComponent={<Text style={{ fontSize: 20, fontWeight: '700', color: 'black' }}>구독</Text>}
             />
-            <View style={{ marginBottom: 20, justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                <ScrollView showsVerticalScrollIndicator={false}>
+            <View
+                style={{
+                    marginBottom: 20,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flex: 1,
+                    backgroundColor: '#ffffff',
+                    width: windowDimensions.width,
+                }}
+            >
+                <ScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 10 }}>
                     <Surface style={styles.bigSurface}>
-                        <View style={styles.otherPriceContainer}>
-                            <Text style={{ alignSelf: 'center', marginBottom: 30 }}>몇명의 인원이 사용하나요?</Text>
-                            <TextInput
-                                selectionColor="#000000"
-                                placeholder="0"
-                                placeholderTextColor="#5B667625"
-                                style={[styles.inputFont]}
-                                keyboardType="number-pad"
-                                textAlign="center"
-                                clearTextOnFocus={true}
-                                onFocus={() => setNumOfMember(0)}
-                                value={numberWithCommas(numOfMember)}
-                                maxLength={10}
-                                onChangeText={(text) => {
-                                    setNumOfMember(Number(text.replaceAll(/,/gi, '')));
-                                }}
-                            />
-                            <Divider style={{ height: 1, width: 189, marginTop: 20, alignSelf: 'center' }} />
-                        </View>
+                        <Text style={{ alignSelf: 'center', marginBottom: 30 }}>몇명의 인원이 사용하나요?</Text>
+                        <TextInput
+                            selectionColor="#000000"
+                            placeholder="0"
+                            placeholderTextColor="#5B667625"
+                            style={[styles.inputFont, { color: numOfMember ? '#FB8C00' : '#5B667625' }]}
+                            keyboardType="number-pad"
+                            textAlign="center"
+                            clearTextOnFocus={true}
+                            onFocus={() => setNumOfMember(0)}
+                            value={numberWithCommas(numOfMember)}
+                            maxLength={10}
+                            onChangeText={(text) => {
+                                setNumOfMember(Number(text.replaceAll(/,/gi, '')));
+                            }}
+                        />
+                        <Divider style={{ height: 1, width: 189, marginTop: 20, alignSelf: 'center' }} />
                     </Surface>
                     <Surface style={styles.bigSurface}>
                         <View style={styles.otherPriceContainer}>
@@ -187,6 +210,20 @@ const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) 
                             />
                             <Text style={{ textAlign: 'center' }}>매월 청구된 금액을 지정된 결제방식으로 자동결제</Text>
                         </Surface>
+
+                        {showDateInput && (
+                            <Surface style={styles.bigSurface}>
+                                <View style={styles.otherPriceContainer}>
+                                    <Text style={{ marginBottom: 30, textAlign: 'center' }}>{`자동결제일\n${
+                                        toggle ? '매년' : '매월'
+                                    }`}</Text>
+                                    <Text style={styles.inputFont}>1일</Text>
+                                    <Text style={styles.subtitle}>{`${returnDate(startDate)} ~ ${returnDate(
+                                        dueDate,
+                                    )}`}</Text>
+                                </View>
+                            </Surface>
+                        )}
                     </View>
                 </ScrollView>
             </View>
@@ -203,17 +240,21 @@ const styles = StyleSheet.create({
         height: 226,
         alignItems: 'center',
         justifyContent: 'center',
-        elevation: 4,
+        elevation: 8,
         borderRadius: 8,
         marginVertical: 25,
     },
     bigSurface: {
         padding: 8,
-        width: 600,
+        width: 570,
         height: 226,
         alignItems: 'center',
         justifyContent: 'center',
-        elevation: 4,
+        // shadowColor: '#000',
+        // shadowRadius: 4,
+        // shadowOpacity: 0.3,
+        // textShadowOffset: { width: 2, height: 4 },
+        elevation: 8,
         borderRadius: 8,
         marginVertical: 25,
     },
