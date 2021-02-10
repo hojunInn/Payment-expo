@@ -1,7 +1,7 @@
 {
   "files": {
-    "app.js": "/Payment-expo/static/js/app.c576b4fa.chunk.js",
-    "app.js.map": "/Payment-expo/static/js/app.c576b4fa.chunk.js.map",
+    "app.js": "/Payment-expo/static/js/app.dea84f0e.chunk.js",
+    "app.js.map": "/Payment-expo/static/js/app.dea84f0e.chunk.js.map",
     "runtime~app.js": "/Payment-expo/static/js/runtime~app.080b1abb.js",
     "runtime~app.js.map": "/Payment-expo/static/js/runtime~app.080b1abb.js.map",
     "static/js/2.8b1273ed.chunk.js": "/Payment-expo/static/js/2.8b1273ed.chunk.js",
@@ -33,6 +33,6 @@
   "entrypoints": [
     "static/js/runtime~app.080b1abb.js",
     "static/js/2.8b1273ed.chunk.js",
-    "static/js/app.c576b4fa.chunk.js"
+    "static/js/app.dea84f0e.chunk.js"
   ]
 }
