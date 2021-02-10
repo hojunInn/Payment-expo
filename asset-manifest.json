@@ -1,11 +1,11 @@
 {
   "files": {
-    "app.js": "/Payment-expo/static/js/app.9781eb52.chunk.js",
-    "app.js.map": "/Payment-expo/static/js/app.9781eb52.chunk.js.map",
+    "app.js": "/Payment-expo/static/js/app.c576b4fa.chunk.js",
+    "app.js.map": "/Payment-expo/static/js/app.c576b4fa.chunk.js.map",
     "runtime~app.js": "/Payment-expo/static/js/runtime~app.080b1abb.js",
     "runtime~app.js.map": "/Payment-expo/static/js/runtime~app.080b1abb.js.map",
-    "static/js/2.94bafd04.chunk.js": "/Payment-expo/static/js/2.94bafd04.chunk.js",
-    "static/js/2.94bafd04.chunk.js.map": "/Payment-expo/static/js/2.94bafd04.chunk.js.map",
+    "static/js/2.8b1273ed.chunk.js": "/Payment-expo/static/js/2.8b1273ed.chunk.js",
+    "static/js/2.8b1273ed.chunk.js.map": "/Payment-expo/static/js/2.8b1273ed.chunk.js.map",
     "fonts/AntDesign.ttf": "/Payment-expo/./fonts/AntDesign.ttf",
     "fonts/Entypo.ttf": "/Payment-expo/./fonts/Entypo.ttf",
     "fonts/Feather.ttf": "/Payment-expo/./fonts/Feather.ttf",
@@ -24,7 +24,7 @@
     "index.html": "/Payment-expo/index.html",
     "manifest.json": "/Payment-expo/manifest.json",
     "serve.json": "/Payment-expo/serve.json",
-    "static/js/2.94bafd04.chunk.js.LICENSE.txt": "/Payment-expo/static/js/2.94bafd04.chunk.js.LICENSE.txt",
+    "static/js/2.8b1273ed.chunk.js.LICENSE.txt": "/Payment-expo/static/js/2.8b1273ed.chunk.js.LICENSE.txt",
     "static/media/bell.png": "/Payment-expo/static/media/bell.cf04af27.png",
     "static/media/heart.png": "/Payment-expo/static/media/heart.23b5c2c0.png",
     "static/media/rocket.png": "/Payment-expo/static/media/rocket.d2f3bf41.png",
@@ -32,7 +32,7 @@
   },
   "entrypoints": [
     "static/js/runtime~app.080b1abb.js",
-    "static/js/2.94bafd04.chunk.js",
-    "static/js/app.9781eb52.chunk.js"
+    "static/js/2.8b1273ed.chunk.js",
+    "static/js/app.c576b4fa.chunk.js"
   ]
 }
