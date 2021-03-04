@@ -1,22 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, Text, FlatList, TextInput, Linking, useWindowDimensions } from 'react-native';
 import { Button, Divider, Header, Icon } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Surface } from 'react-native-paper';
+import { ThemeContext } from 'styled-components/native';
 import { useCheckValidationMutation } from '../../../graphql/generated';
 import { numberWithCommas } from '../../../utils/money';
 import { returnMerchantUid } from './functions';
-import jQuery from 'jquery';
-window.$ = window.jQuery = jQuery;
+// import jQuery from 'jquery';
+// window.$ = window.jQuery = jQuery;
 
-var IMP = window.IMP;
-IMP.init('imp10942072');
+// var IMP = window.IMP;
+// IMP.init('imp10942072');
 
 const PayPointHomeScreen = () => {
     const [price, setPrice] = useState(0);
     const [showOtherPrice, setShowOtherPrice] = useState(false);
     const [checkValidation] = useCheckValidationMutation();
     const windowDimensions = useWindowDimensions();
+    const theme = useContext(ThemeContext);
 
     const paymentInput = {
         pg: 'html5_inicis',
@@ -91,7 +93,7 @@ const PayPointHomeScreen = () => {
                                 title="포인트 구매"
                                 type="clear"
                                 titleStyle={{ color: 'white', fontWeight: '800' }}
-                                buttonStyle={{ backgroundColor: '#FB8C00' }}
+                                buttonStyle={{ backgroundColor: '#2fb5b5' }}
                                 containerStyle={{ width: 200, alignSelf: 'center', marginBottom: 20 }}
                             />
                             <Text style={{ alignSelf: 'center' }}>일정의 금액을 구매하는 결제방식</Text>
@@ -114,11 +116,11 @@ const PayPointHomeScreen = () => {
                                     titleStyle={{
                                         alignSelf: 'center',
                                         textDecorationLine: 'underline',
-                                        color: showOtherPrice ? '#FB8C00' : '#00000060',
+                                        color: showOtherPrice ? '#2fb5b5' : '#00000060',
                                     }}
                                     onPress={() => setShowOtherPrice(!showOtherPrice)}
                                 />
-                                <Icon name="check-circle" color={showOtherPrice ? '#FB8C00' : '#00000060'} />
+                                <Icon name="check-circle" color={showOtherPrice ? '#2fb5b5' : '#00000060'} />
                             </View>
                             {showOtherPrice && (
                                 <View style={styles.otherPriceContainer}>
@@ -129,7 +131,7 @@ const PayPointHomeScreen = () => {
                                         selectionColor="#000000"
                                         placeholder="0"
                                         placeholderTextColor="#5B667625"
-                                        style={[styles.inputFont, { color: price === 0 ? '#00000030' : '#FB8C00' }]}
+                                        style={[styles.inputFont, { color: price === 0 ? '#00000030' : '#2fb5b5' }]}
                                         textAlign="center"
                                         onFocus={() => setPrice(0)}
                                         clearTextOnFocus={true}
@@ -148,7 +150,7 @@ const PayPointHomeScreen = () => {
                         title="결제"
                         disabled={price <= 0}
                         titleStyle={{ color: 'white', fontWeight: '800' }}
-                        buttonStyle={{ width: 132, backgroundColor: '#FB8C00', alignSelf: 'center' }}
+                        buttonStyle={{ width: 132, backgroundColor: '#2fb5b5', alignSelf: 'center' }}
                         onPress={() => callPaymentModule()}
                     />
                 </ScrollView>

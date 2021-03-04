@@ -36,11 +36,11 @@ const SelectPoints = (props: PaymentCardProps) => {
                     titleStyle={{
                         alignSelf: 'center',
                         textDecorationLine: 'underline',
-                        color: showOtherPrice ? '#FB8C00' : '#00000060',
+                        color: showOtherPrice ? '#5DAF57' : '#00000060',
                     }}
                     onPress={() => setShowOtherPrice(!showOtherPrice)}
                 />
-                <Icon name="check-circle" color={showOtherPrice ? '#FB8C00' : '#00000060'} />
+                <Icon name="check-circle" color={showOtherPrice ? '#5DAF57' : '#00000060'} />
             </View>
             {showOtherPrice && (
                 <View style={styles.otherPriceContainer}>

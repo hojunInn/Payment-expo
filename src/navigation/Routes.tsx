@@ -8,7 +8,7 @@ const Routes: React.FC = () => {
 
     return (
         <NavigationContainer>
-            {query === 'TestString' ? <PaymentStackScreens /> : <SubscribeStackScreens />}
+            {query === 'pay' ? <PaymentStackScreens /> : <SubscribeStackScreens />}
         </NavigationContainer>
     );
 };

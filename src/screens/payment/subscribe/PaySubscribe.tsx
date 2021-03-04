@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, useWindowDimensions, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, Text, TextInput, useWindowDimensions, View } from 'react-native';
 import { SubscriptionData } from '../../../components/types';
 import { Surface, Switch } from 'react-native-paper';
 import { Button, Divider, Header, Icon } from 'react-native-elements';
@@ -14,11 +14,10 @@ import {
     useRoutinePaymentMutation,
 } from '../../../graphql/generated';
 import { returnMerchantUid } from '../point/functions';
-import { Linking } from 'expo';
 window.$ = window.jQuery = jQuery;
 
-var IMP = window.IMP;
-IMP.init('imp10942072');
+// var IMP = window.IMP;
+// IMP.init('imp10942072');
 
 const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) => {
     const [subscribeData, setSubscribeData] = useState<SubscriptionData>();
@@ -71,6 +70,17 @@ const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) 
             },
         });
 
+        if (Platform.OS !== 'web') {
+            /* 5. 리액트 네이티브 환경에 대응하기 */
+            const params = {
+                userCode: 'imp10942072', // 가맹점 식별코드
+                data: paymentInput, // 결제 데이터
+                type: 'payment', // 결제와 본인인증 구분을 위한 필드
+            };
+            const paramsToString = JSON.stringify(params);
+            window.ReactNativeWebView.postMessage(paramsToString);
+        }
+
         IMP.request_pay(paymentInput, function (rsp) {
             console.log(rsp);
             validationCheck(rsp.imp_uid, rsp.merchant_uid);
@@ -112,7 +122,7 @@ const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) 
                 containerStyle={{ borderBottomWidth: 1, backgroundColor: '#ffffff' }}
                 rightComponent={
                     <Button
-                        onPress={() => Linking.openURL('https//localhost:19006')}
+                        onPress={() => navigation.goBack()}
                         icon={<Icon size={30} name="close" color="black" />}
                         type="clear"
                     />
@@ -129,14 +139,20 @@ const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) 
                     width: windowDimensions.width,
                 }}
             >
-                <ScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 10 }}>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    style={{
+                        paddingHorizontal: 10,
+                        width: windowDimensions.width,
+                    }}
+                >
                     <Surface style={styles.bigSurface}>
                         <Text style={{ alignSelf: 'center', marginBottom: 30 }}>몇명의 인원이 사용하나요?</Text>
                         <TextInput
                             selectionColor="#000000"
                             placeholder="0"
                             placeholderTextColor="#5B667625"
-                            style={[styles.inputFont, { color: numOfMember ? '#FB8C00' : '#5B667625' }]}
+                            style={[styles.inputFont, { color: numOfMember ? '#2fb5b5' : '#5B667625' }]}
                             keyboardType="number-pad"
                             textAlign="center"
                             clearTextOnFocus={true}
@@ -160,9 +176,9 @@ const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) 
                             <Switch
                                 value={toggle}
                                 onValueChange={setToggle}
-                                color="#FB8C00"
-                                trackColor="#FB8C0080"
-                                thumbColor="#FB8C00"
+                                color="#2fb5b5"
+                                trackColor="#2fb5b580"
+                                thumbColor="#2fb5b5"
                                 style={{ marginHorizontal: 10 }}
                             />
                             <Text style={{ color: toggle ? 'black' : '#ADB2BA' }}>매년</Text>
@@ -177,8 +193,8 @@ const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) 
                         </View>
                     </Surface>
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Surface style={styles.surface}>
+                    <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                        <Surface style={[styles.surface, { marginRight: 20 }]}>
                             <Button
                                 title="수동결제"
                                 type="clear"
@@ -200,7 +216,7 @@ const PaySubscribe = ({ navigation, route }: SubscribeNavProps<'PaySubscribe'>) 
                                 type="clear"
                                 titleStyle={styles.buttonTitleFont}
                                 buttonStyle={{
-                                    backgroundColor: '#FB8C00',
+                                    backgroundColor: '#2fb5b5',
                                     width: 130,
                                 }}
                                 onPress={() => {
@@ -250,6 +266,7 @@ const styles = StyleSheet.create({
         height: 226,
         alignItems: 'center',
         justifyContent: 'center',
+        alignSelf: 'center',
         // shadowColor: '#000',
         // shadowRadius: 4,
         // shadowOpacity: 0.3,
@@ -268,7 +285,7 @@ const styles = StyleSheet.create({
         lineHeight: 36,
         letterSpacing: -0.3,
         fontSize: 34,
-        color: '#FB8C00',
+        color: '#2fb5b5',
         textAlign: 'center',
         marginBottom: 10,
     },
